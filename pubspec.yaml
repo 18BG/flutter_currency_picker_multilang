@@ -1,13 +1,12 @@
-name: currency_picker
-description: A flutter package to select a currency from a list of currencies.
+name: currency_picker_multilang
+description: A fork of currency_picker with added multi-language support
+version: 1.0.0
 
-homepage: https://github.com/Daniel-Ioannou
+homepage: https://github.com/18BG
 repository: https://github.com/Daniel-Ioannou/flutter_currency_picker
 
-version: 2.0.21
-
 environment:
-  sdk: '>=2.12.0 <4.0.0'
+  sdk: ">=2.12.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -15,12 +14,12 @@ dependencies:
   collection: ^1.18.0
 
 flutter:
+  generate: true
   assets:
     - lib/src/res/
+    - lib/l10n/
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   lint: ^2.3.0
-
-

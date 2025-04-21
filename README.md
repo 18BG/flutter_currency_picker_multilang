@@ -1,25 +1,27 @@
-# Currency picker
+# Fork of Currency picker
 
-[![pub package](https://img.shields.io/pub/v/currency_picker.svg)](https://pub.dev/packages/currency_picker)
+# To support multilang
 
-A flutter package to select a currency from a list of currencies. 
+A flutter package to select a currency from a list of currencies.
 
 <img height="600" alt="n1" src="https://raw.githubusercontent.com/Daniel-Ioannou/flutter_currency_picker/master/assets/ReadMe%20Screenshot.png">
 
 ## Getting Started
 
- Add the package to your pubspec.yaml:
+Add the package to your pubspec.yaml:
 
- ```yaml
- currency_picker: ^2.0.21
- ```
- 
- In your dart file, import the library:
+```yaml
+currency_picker_multilang: ^1.0.0
+```
 
- ```Dart
- import 'package:currency_picker/currency_picker.dart';
- ``` 
-  Show currency picker using `showCurrencyPicker`:
+In your dart file, import the library:
+
+```Dart
+import 'package:currency_picker_multilang/currency_picker.dart';
+```
+
+Show currency picker using `showCurrencyPicker`:
+
 ```Dart
 showCurrencyPicker(
    context: context,
@@ -33,13 +35,14 @@ showCurrencyPicker(
 ```
 
 ### Parameters:
-* `onSelect`: Called when a currency is select. The currency picker passes the new value to the callback (required)
-* `showFlag`: Shows flag for each currency. Default value `true` (optional). 
-* `searchHint`: Option to customize hint of the search TextField (optional).
-* `showCurrencyName`: Option to show/hide the currency name, default value `true` (optional).
-* `showCurrencyCode`: Option to show/hide the currency code, default value `true` (optional).
-* `showSearchField`: Option to show/hide the search TextField, default value `true` (optional).
-* `currencyFilter`: Can be used to filter the Currency list (optional).
+
+- `onSelect`: Called when a currency is select. The currency picker passes the new value to the callback (required)
+- `showFlag`: Shows flag for each currency. Default value `true` (optional).
+- `searchHint`: Option to customize hint of the search TextField (optional).
+- `showCurrencyName`: Option to show/hide the currency name, default value `true` (optional).
+- `showCurrencyCode`: Option to show/hide the currency code, default value `true` (optional).
+- `showSearchField`: Option to show/hide the search TextField, default value `true` (optional).
+- `currencyFilter`: Can be used to filter the Currency list (optional).
   ```Dart
    showCurrencyPicker(
       context: context,
@@ -48,9 +51,9 @@ showCurrencyPicker(
       },
       currencyFilter: <String>['EUR', 'GBP', 'USD', 'AUD', 'CAD', 'JPY', 'HKD', 'CHF', 'SEK', 'ILS'],
    );
-  ``` 
-* `favorite`: Can be used to show the favorite currencies at the top of the list (optional).
-* `theme`: Can be used to customizing the currency list bottom sheet. (optional).
+  ```
+- `favorite`: Can be used to show the favorite currencies at the top of the list (optional).
+- `theme`: Can be used to customizing the currency list bottom sheet. (optional).
   ```Dart
    showCurrencyPicker(
      context: context,
@@ -73,6 +76,8 @@ showCurrencyPicker(
      ),
      onSelect: (Currency currency) => print('Select currency: ${currency.name}'),
    );
-  ``` 
+  ```
+
 ## Contributions
+
 Contributions of any kind are more than welcome! Feel free to fork and improve currency_picker in any way you want, make a pull request, or open an issue.

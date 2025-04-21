@@ -1,4 +1,4 @@
-import 'package:currency_picker/currency_picker.dart';
+import 'package:currency_picker_multilang/currency_picker.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());

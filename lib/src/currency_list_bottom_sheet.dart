@@ -18,6 +18,7 @@ void showCurrencyListBottomSheet({
   bool showDragHandle = false,
   ScrollPhysics? physics,
   CurrencyPickerThemeData? theme,
+  String locale = 'fr',
 }) {
   final ShapeBorder shape = theme?.shape ??
       const RoundedRectangleBorder(
@@ -43,6 +44,7 @@ void showCurrencyListBottomSheet({
       showCurrencyName,
       showCurrencyCode,
       theme,
+      locale,
     ),
   );
 }
@@ -59,6 +61,7 @@ Widget _builder(
   bool showCurrencyName,
   bool showCurrencyCode,
   CurrencyPickerThemeData? theme,
+  String locale,
 ) {
   final device = MediaQuery.of(context).size.height;
   final statusBarHeight = MediaQuery.of(context).padding.top;
@@ -77,6 +80,7 @@ Widget _builder(
       currencyFilter: currencyFilter,
       physics: physics,
       theme: theme,
+      locale: locale,
     ),
   );
 }

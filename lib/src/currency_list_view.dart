@@ -1,5 +1,7 @@
-import 'package:currency_picker/src/extensions.dart';
+import 'package:currency_picker_multilang/src/extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
 
 import 'currency.dart';
 import 'currency_picker_theme_data.dart';
@@ -55,6 +57,10 @@ class CurrencyListView extends StatefulWidget {
   /// currency list bottom sheet.
   final CurrencyPickerThemeData? theme;
 
+  /// The locale to use for displaying currency names.
+  /// Defaults to 'fr' (French).
+  final String locale;
+
   const CurrencyListView({
     Key? key,
     required this.onSelect,
@@ -68,6 +74,7 @@ class CurrencyListView extends StatefulWidget {
     this.physics,
     this.controller,
     this.theme,
+    this.locale = 'fr',
   }) : super(key: key);
 
   @override
@@ -80,6 +87,7 @@ class _CurrencyListViewState extends State<CurrencyListView> {
   late List<Currency> _filteredList;
   late List<Currency> _currencyList;
   List<Currency>? _favoriteList;
+  Map<String, dynamic>? _localizedNames;
 
   TextEditingController? _searchController;
 
@@ -104,13 +112,65 @@ class _CurrencyListViewState extends State<CurrencyListView> {
     }
 
     _filteredList.addAll(_currencyList);
+    _loadLocalizedNames();
     super.initState();
+  }
+
+  // Charge les noms localisés depuis les fichiers ARB
+  Future<void> _loadLocalizedNames() async {
+    try {
+      final String locale = widget.locale;
+      final String data = await rootBundle
+          .loadString('packages/currency_picker/lib/l10n/intl_$locale.arb');
+      setState(() {
+        _localizedNames = json.decode(data);
+      });
+    } catch (e) {
+      // En cas d'erreur, fallback sur le fichier français
+      try {
+        final String data = await rootBundle
+            .loadString('packages/currency_picker/lib/l10n/intl_fr.arb');
+        setState(() {
+          _localizedNames = json.decode(data);
+        });
+      } catch (e) {
+        // Si le fallback échoue également, on utilise les noms par défaut
+        _localizedNames = null;
+      }
+    }
   }
 
   @override
   void dispose() {
     _searchController?.dispose();
     super.dispose();
+  }
+
+  // Obtenir le nom localisé d'une devise
+  String _getLocalizedCurrencyName(Currency currency) {
+    if (_localizedNames == null) {
+      return currency.name;
+    }
+
+    final String key = '${currency.code.toLowerCase()}_name';
+    return _localizedNames![key] ?? currency.name;
+  }
+
+  void _filterSearchResults(String query) {
+    List<Currency> searchResult = <Currency>[];
+
+    if (query.isEmpty) {
+      searchResult.addAll(_currencyList);
+    } else {
+      final String lowerQuery = query.toLowerCase();
+      searchResult = _currencyList.where((c) {
+        final String localizedName = _getLocalizedCurrencyName(c).toLowerCase();
+        return localizedName.contains(lowerQuery) ||
+            c.code.toLowerCase().contains(lowerQuery);
+      }).toList();
+    }
+
+    setState(() => _filteredList = searchResult);
   }
 
   @override
@@ -123,16 +183,17 @@ class _CurrencyListViewState extends State<CurrencyListView> {
           child: widget.showSearchField
               ? TextField(
                   controller: _searchController,
-                  decoration: widget.theme?.inputDecoration ?? InputDecoration(
-                    labelText: widget.searchHint ?? "Search",
-                    hintText: widget.searchHint ?? "Search",
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: const Color(0xFF8C98A8).withOpacity(0.2),
+                  decoration: widget.theme?.inputDecoration ??
+                      InputDecoration(
+                        labelText: widget.searchHint ?? "Search",
+                        hintText: widget.searchHint ?? "Search",
+                        prefixIcon: const Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: const Color(0xFF8C98A8).withOpacity(0.2),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
                   onChanged: _filterSearchResults,
                 )
               : Container(),
@@ -198,7 +259,7 @@ class _CurrencyListViewState extends State<CurrencyListView> {
                           ],
                           if (widget.showCurrencyName) ...[
                             Text(
-                              currency.name,
+                              _getLocalizedCurrencyName(currency),
                               style: widget.showCurrencyCode
                                   ? subtitleTextStyle
                                   : titleTextStyle,
@@ -247,24 +308,6 @@ class _CurrencyListViewState extends State<CurrencyListView> {
         fontSize: widget.theme?.flagSize ?? 25,
       ),
     );
-  }
-
-  void _filterSearchResults(String query) {
-    List<Currency> searchResult = <Currency>[];
-
-    if (query.isEmpty) {
-      searchResult.addAll(_currencyList);
-    } else {
-      searchResult = _currencyList
-          .where(
-            (c) =>
-                c.name.toLowerCase().contains(query.toLowerCase().trim()) ||
-                c.code.toLowerCase().contains(query.toLowerCase().trim()),
-          )
-          .toList();
-    }
-
-    setState(() => _filteredList = searchResult);
   }
 
   TextStyle get _defaultTitleTextStyle => const TextStyle(fontSize: 17);

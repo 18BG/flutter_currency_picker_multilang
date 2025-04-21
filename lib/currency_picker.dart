@@ -6,10 +6,10 @@ import 'src/currency.dart';
 import 'src/currency_list_bottom_sheet.dart' as currency_list;
 import 'src/currency_picker_theme_data.dart';
 
-export 'package:currency_picker/src/currency.dart';
-export 'package:currency_picker/src/currency_picker_theme_data.dart';
-export 'package:currency_picker/src/currency_service.dart';
-export 'package:currency_picker/src/currency_utils.dart';
+export 'package:currency_picker_multilang/src/currency.dart';
+export 'package:currency_picker_multilang/src/currency_picker_theme_data.dart';
+export 'package:currency_picker_multilang/src/currency_service.dart';
+export 'package:currency_picker_multilang/src/currency_utils.dart';
 
 /// Show currency picker
 ///
@@ -35,6 +35,8 @@ export 'package:currency_picker/src/currency_utils.dart';
 ///  display the [BottomSheet] when set to `true`. This is useful in the case
 ///  that a modal [BottomSheet] needs to be displayed above all other content
 ///  but the caller is inside another [Navigator].
+///
+///  `locale`: The locale to use for displaying currency names. Default is 'fr' (optional).
 ///
 /// This example demonstrates how to use `showCurrencyPicker`
 /// ```dart
@@ -62,6 +64,7 @@ void showCurrencyPicker({
   bool showDragHandle = false,
   ScrollPhysics? physics,
   CurrencyPickerThemeData? theme,
+  String locale = 'fr',
   @Deprecated(
     'Use inputDecoration instead. '
     'This feature was deprecated after v2.0.18.',
@@ -86,6 +89,7 @@ void showCurrencyPicker({
     theme: theme,
     physics: physics,
     showDragHandle: showDragHandle,
+    locale: locale,
   );
 }
 
