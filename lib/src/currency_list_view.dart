@@ -1,10 +1,11 @@
+import 'package:currency_picker_multilang/currency_picker.dart';
 import 'package:currency_picker_multilang/src/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 
 import 'currency.dart';
-import 'currency_picker_theme_data.dart';
+
 import 'currency_service.dart';
 import 'currency_utils.dart';
 
@@ -120,16 +121,16 @@ class _CurrencyListViewState extends State<CurrencyListView> {
   Future<void> _loadLocalizedNames() async {
     try {
       final String locale = widget.locale;
-      final String data = await rootBundle
-          .loadString('packages/currency_picker/lib/l10n/intl_$locale.arb');
+      final String data = await rootBundle.loadString(
+          'packages/currency_picker_multilang/lib/l10n/intl_$locale.arb');
       setState(() {
         _localizedNames = json.decode(data);
       });
     } catch (e) {
       // En cas d'erreur, fallback sur le fichier français
       try {
-        final String data = await rootBundle
-            .loadString('packages/currency_picker/lib/l10n/intl_fr.arb');
+        final String data = await rootBundle.loadString(
+            'packages/currency_picker_multilang/lib/l10n/intl_fr.arb');
         setState(() {
           _localizedNames = json.decode(data);
         });
@@ -289,7 +290,7 @@ class _CurrencyListViewState extends State<CurrencyListView> {
     if (currency.flag == null) {
       return Image.asset(
         'no_flag.png'.imagePath,
-        package: 'currency_picker',
+        package: 'currency_picker_multilang',
         width: 27,
       );
     }
@@ -297,7 +298,7 @@ class _CurrencyListViewState extends State<CurrencyListView> {
     if (currency.isFlagImage) {
       return Image.asset(
         currency.flag!.imagePath,
-        package: 'currency_picker',
+        package: 'currency_picker_multilang',
         width: 27,
       );
     }
